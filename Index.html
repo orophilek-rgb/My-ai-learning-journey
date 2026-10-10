@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Toolbox | Free AI Tools Directory</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #071426;
+      color: #f5f8ff;
+    }
+
+    header {
+      text-align: center;
+      padding: 38px 16px 24px;
+      background: linear-gradient(140deg, #102747, #071426);
+    }
+
+    .logo { font-size: 13px; letter-spacing: 4px; color: #a9caff; }
+
+    h1 { margin: 14px 0 8px; font-size: clamp(30px, 7vw, 48px); }
+
+    header p { color: #bdcbe0; line-height: 1.6; }
+
+    main { max-width: 1000px; margin: auto; padding: 22px 16px 40px; }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #304665;
+      border-radius: 10px;
+      background: #10233c;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 22px;
+    }
+
+    .filters button {
+      border: 1px solid #3b5374;
+      border-radius: 22px;
+      padding: 9px 15px;
+      color: white;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .filters button.active, .filters button:hover {
+      background: white;
+      color: #071426;
+    }
+
+    .count { color: #a9bedb; font-size: 14px; margin-bottom: 14px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: #10233c;
+      border: 1px solid #263d5b;
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      min-height: 205px;
+    }
+
+    .emoji { font-size: 28px; }
+    .card h2 { font-size: 19px; margin: 12px 0 8px; }
+    .card p { color: #bdcbe0; line-height: 1.5; flex-grow: 1; }
+    .tag { color: #a9caff; font-size: 12px; margin-bottom: 14px; }
+
+    .card a {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      color: #071426;
+      background: white;
+      border-radius: 8px;
+      padding: 11px;
+      font-weight: bold;
+    }
+
+    #empty { color: #bdcbe0; text-align: center; padding: 30px; }
+
+    footer { text-align: center; color: #91a6c3; padding: 24px; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">✦ YOUR AI DISCOVERY HUB</div>
+    <h1>AI Toolbox</h1>
+    <p>Discover AI tools for your next big idea.<br>
+    Explore, create and learn — all in one place.</p>
+  </header>
+
+  <main>
+    <input id="search" type="search" placeholder="🔎 Search tools by name or purpose...">
+
+    <select id="category" aria-label="Choose a category">
+      <option value="All">All categories</option>
+      <option value="Writing">Writing</option>
+      <option value="Images">Images</option>
+      <option value="Video">Video</option>
+      <option value="Design">Design</option>
+      <option value="Coding">Coding</option>
+    </select>
+
+    <div class="filters" id="filters">
+      <button class="active" data-category="All">All tools</button>
+      <button data-category="Writing">Writing</button>
+      <button data-category="Images">Images</button>
+      <button data-category="Video">Video</button>
+      <button data-category="Design">Design</button>
+      <button data-category="Coding">Coding</button>
+    </div>
+
+    <div class="count" id="count"></div>
+    <div class="grid" id="tools"></div>
+    <div id="empty" hidden>No tools found. Try another search.</div>
+  </main>
+
+  <footer>Made for curious minds ✦ Always check each tool's current free-plan limits.</footer>
+
+  <script>
+    const aiTools = [
+      {
+        name: "ChatGPT",
+        category: "Writing",
+        icon: "✍️",
+        description: "Ask questions, brainstorm ideas and draft text.",
+        url: "https://chatgpt.com/"
+      },
+      {
+        name: "Microsoft Copilot",
+        category: "Writing",
+        icon: "💬",
+        description: "Get help with research, ideas and everyday tasks.",
+        url: "https://copilot.microsoft.com/"
+      },
+      {
+        name: "Adobe Firefly",
+        category: "Images",
+        icon: "🎨",
+        description: "Explore AI image generation and creative tools.",
+        url: "https://firefly.adobe.com/"
+      },
+      {
+        name: "Leonardo AI",
+        category: "Images",
+        icon: "🖼️",
+        description: "Create AI artwork and visual concepts.",
+        url: "https://leonardo.ai/"
+      },
+      {
+        name: "Runway",
+        category: "Video",
+        icon: "🎬",
+        description: "Explore AI-powered video creation tools.",
+        url: "https://runwayml.com/"
+      },
+      {
+        name: "CapCut",
+        category: "Video",
+        icon: "📹",
+        description: "Edit videos and explore AI-assisted features.",
+        url: "https://www.capcut.com/"
+      },
+      {
+        name: "Canva",
+        category: "Design",
+        icon: "✨",
+        description: "Design presentations, posts and graphics.",
+        url: "https://www.canva.com/"
+      },
+      {
+        name: "Photopea",
+        category: "Design",
+        icon: "🪄",
+        description: "Edit images in a browser-based editor.",
+        url: "https://www.photopea.com/"
+      },
+      {
+        name: "Replit",
+        category: "Coding",
+        icon: "💻",
+        description: "Write code and experiment with app ideas online.",
+        url: "https://replit.com/"
+      },
+      {
+        name: "Google AI Studio",
+        category: "Coding",
+        icon: "🧠",
+        description: "Experiment with Google's AI models and APIs.",
+        url: "https://aistudio.google.com/"
+      }
+    ];
+
+    const search = document.getElementById("search");
+    const category = document.getElementById("category");
+    const filters = document.getElementById("filters");
+    const tools = document.getElementById("tools");
+    const count = document.getElementById("count");
+    const empty = document.getElementById("empty");
+
+    function renderTools() {
+      const query = search.value.toLowerCase().trim();
+      const selected = category.value;
+
+      const results = aiTools.filter(tool => {
+        const matchesSearch =
+          (tool.name + " " + tool.description + " " + tool.category)
+            .toLowerCase().includes(query);
+
+        return matchesSearch &&
+          (selected === "All" || tool.category === selected);
+      });
+
+      tools.innerHTML = results.map(tool => `
+        <article class="card">
+          <div class="emoji">${tool.icon}</div>
+          <h2>${tool.name}</h2>
+          <p>${tool.description}</p>
+          <div class="tag">${tool.category} · Check free-plan limits</div>
+          <a href="${tool.url}" target="_blank" rel="noopener noreferrer">
+            Visit tool ↗
+          </a>
+        </article>
+      `).join("");
+
+      count.textContent = `${results.length} tool${results.length === 1 ? "" : "s"} found`;
+      empty.hidden = results.length !== 0;
+
+      document.querySelectorAll("#filters button").forEach(button => {
+        button.classList.toggle("active", button.dataset.category === selected);
+      });
+    }
+
+    search.addEventListener("input", renderTools);
+    category.addEventListener("change", renderTools);
+
+    filters.addEventListener("click", event => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      category.value = button.dataset.category;
+      renderTools();
+    });
+
+    renderTools();
+  </script>
+</body>
+</html>
